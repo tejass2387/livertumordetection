@@ -1,0 +1,10 @@
+# Path to the main data directory (relative to this file)
+path: ./data
+
+# Directories for training and validation images
+train: train
+val: test
+
+# Class names
+names:
+  0: Liver_Tumor

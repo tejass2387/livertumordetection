@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liver Tumor Analysis Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-toggle.css') }}">
+</head>
+<body>
+    
+    <button id="theme-toggle" class="theme-toggle"></button>
+
+    <button id="logout-button" class="logout-button" style="display: none;">Logout</button>
+
+    <div class="dashboard">
+        <div class="panel input-panel">
+            <h1>Analysis Controls</h1>
+            <form method="post" enctype="multipart/form-data" id="uploadForm">
+                <label for="fileUpload" class="upload-area">
+                    <div class="upload-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v4h4v2h-4v4h-2v-4H7v-2h4V7z" fill="#667085"/></svg></div>
+                    <p>Click to Upload Image</p>
+                    <p id="fileName">No file selected</p>
+                </label>
+                <input type="file" name="file" id="fileUpload" onchange="fileSelected()">
+                <button type="submit" class="btn-predict" id="predictBtn" onclick="showLoader()">Run Analysis</button>
+            </form>
+        </div>
+        <div class="panel results-panel" id="results-panel">
+            {% if result_filename %}
+                <h2>Analysis Report</h2>
+                <div class="report-content">
+                    <div class="result-image"><img src="{{ url_for('static', filename='uploads/' + result_filename) }}" alt="Analysis Result"></div>
+                    <div class="result-summary">
+                        <div class="summary-item"><strong>Status:</strong><span id="detection-status" class="status {{ 'tumor' if 'Detected' in detection_status else 'no_tumor' }}">{{ detection_status }}</span></div>
+                        {% if tumor_type != "N/A" %}
+                        <div class="summary-item"><strong>Predicted Type:</strong><span id="tumor-type" class="type">{{ tumor_type }}</span></div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="loader-container" id="loader-container"><div class="loader"></div><p>Processing Scan...</p></div>
+                <h2 class="results-placeholder" id="placeholder">Awaiting Image for Analysis</h2>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="info-section panel">
+        <h3>General Liver Health & Wellness</h3>
+        <div class="tumor-info-grid">
+            <div>
+                <h4>Foods for a Healthy Liver 🥗</h4>
+                <ul>
+                    <li><span class="icon">☕</span>Coffee & Green Tea</li>
+                    <li><span class="icon">🍇</span>Grapes, Blueberries & Cranberries</li>
+                    <li><span class="icon">🥬</span>Cruciferous Vegetables (Broccoli, Spinach)</li>
+                    <li><span class="icon">🌰</span>Nuts & Fatty Fish (Omega-3s)</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Measures for Liver Safety 🛡️</h4>
+                <ul>
+                    <li><span class="icon">⚖️</span>Maintain a Healthy Weight & Exercise</li>
+                    <li><span class="icon">🍷</span>Limit Alcohol Consumption</li>
+                    <li><span class="icon">💉</span>Avoid Risky Behaviors (e.g., illicit drugs)</li>
+                    <li><span class="icon">💊</span>Follow Medication Instructions Carefully</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-section panel">
+        <h3>About Benign Liver Tumors</h3>
+        <div class="tumor-info-grid">
+            <div class="tumor-card">
+                <h4>Hepatocellular Adenoma</h4>
+                <p><strong>Causes:</strong> Often linked to hormonal influences, particularly estrogen from oral contraceptives.</p>
+                <p><strong>Statistics:</strong> Primarily affects women of childbearing age (20-44 years).</p>
+                <p><strong>Prevention/Management:</strong> Discontinuing oral contraceptives can sometimes lead to regression. Monitoring is key.</p>
+            </div>
+            <div class="tumor-card">
+                <h4>Hemangioma</h4>
+                <p><strong>Causes:</strong> A benign tangle of blood vessels, considered a congenital malformation. The exact cause is unknown.</p>
+                <p><strong>Statistics:</strong> The most common benign liver tumor, more frequently diagnosed in women than men, typically between ages 30-50.</p>
+                <p><strong>Prevention/Management:</strong> Generally requires no treatment unless it becomes large and causes symptoms.</p>
+            </div>
+            <div class="tumor-card">
+                <h4>Focal Nodular Hyperplasia (FNH)</h4>
+                <p><strong>Causes:</strong> Believed to be a regenerative response of liver cells to a localized vascular abnormality.</p>
+                <p><strong>Statistics:</strong> The second most common benign liver tumor, also more common in women, usually found in adults aged 20-50.</p>
+                <p><strong>Prevention/Management:</strong> Typically requires no treatment and is considered harmless.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // --- Your existing script functions ---
+        function fileSelected() {
+            const fileInput = document.getElementById('fileUpload');
+            const fileNameDisplay = document.getElementById('fileName');
+            const predictBtn = document.getElementById('predictBtn');
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = `File: ${fileInput.files[0].name}`;
+                predictBtn.style.display = 'block';
+            } else {
+                fileNameDisplay.textContent = 'No file selected';
+                predictBtn.style.display = 'none';
+            }
+        }
+        function showLoader() {
+            if (document.getElementById('fileUpload').files.length > 0) {
+                const resultsPanel = document.getElementById('results-panel');
+                resultsPanel.innerHTML = `
+                    <div class="loader-container" style="display: block;">
+                        <div class="loader"></div>
+                        <p>Processing Scan...</p>
+                    </div>`;
+            }
+        }
+    </script>
+    
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    
+    <script type="module">
+        import { auth, onAuthStateChanged, signOut } from './static/js/firebaseConfig.js';
+        const logoutButton = document.getElementById('logout-button');
+
+        // 1. Check if user is logged in
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, show the logout button
+                logoutButton.style.display = 'block';
+            } else {
+                // User is signed out, redirect to login page
+                console.log("No user signed in. Redirecting to login.");
+                window.location.href = '/login';
+            }
+        });
+
+        // 2. Add functionality to logout button
+        logoutButton.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                // Sign-out successful. The listener above will redirect.
+            } catch (error) {
+                console.error("Logout error:", error);
+            }
+        });
+    </script>
+</body>
+</html>

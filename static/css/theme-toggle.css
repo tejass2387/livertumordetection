@@ -1,0 +1,63 @@
+/* --- Theme Toggle Button --- */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Make sure it's on top */
+}
+
+/* --- Dark Mode Color Definitions --- */
+/* This is where all the magic happens. We just redefine the CSS variables. */
+
+body.dark-mode {
+    /* Main Dashboard & General */
+    --bg-color: #101828; /* Deep blue background */
+    --panel-bg: #1f2937; /* Dark grey panels */
+    --text-color: #eaecf0; /* Light grey text */
+    --header-color: #ffffff;
+    --border-color: #344054; /* Darker border */
+    --shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+
+    /* Auth Page Branding */
+    .auth-form-panel {
+        background-color: #101828; /* Match the dark bg */
+    }
+
+    /* Results & Status */
+    --tumor-color: #f06a6a; /* Lighter red for dark mode */
+    --notumor-color: #34d399; /* Lighter green for dark mode */
+
+    /* Upload & Buttons */
+    --placeholder-text-color: #667085;
+}
+
+/* Specific overrides for dark mode */
+body.dark-mode .status.tumor {
+    background-color: rgba(217, 45, 32, 0.1);
+    color: var(--tumor-color);
+}
+body.dark-mode .status.no_tumor {
+    background-color: rgba(3, 152, 85, 0.1);
+    color: var(--notumor-color);
+}
+body.dark-mode .summary-item strong {
+    color: #98a2b3;
+}
+body.dark-mode .upload-area:hover {
+    background-color: #1d2939;
+}
+body.dark-mode .tumor-card {
+    background-color: #1d2939;
+    color: #98a2b3;
+}

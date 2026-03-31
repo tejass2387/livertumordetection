@@ -1,0 +1,127 @@
+/* --- Medical/Tech Theme for Auth Pages --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --primary-font: 'Inter', sans-serif;
+    --bg-color: #f0f2f5;
+    --panel-bg: #ffffff;
+    --text-color: #344054;
+    --header-color: #101828;
+    --primary-accent: #2970ff;
+    --border-color: #eaecf0;
+    --shadow: 0 6px 24px rgba(16, 24, 40, 0.05);
+}
+
+body {
+    font-family: var(--primary-font);
+    margin: 0;
+}
+
+.auth-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* --- Left Branding Panel --- */
+.auth-brand-panel {
+    flex: 1;
+    background: linear-gradient(135deg, #0d2c54 0%, #2970ff 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+}
+.auth-brand-panel h2 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.auth-brand-panel p {
+    font-size: 18px;
+    opacity: 0.8;
+}
+
+/* --- Right Form Panel --- */
+.auth-form-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-color);
+}
+.auth-container {
+    background-color: var(--panel-bg);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    width: 100%;
+    max-width: 400px;
+}
+.auth-container h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--header-color);
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* --- Forms, Links, and Error Styles --- */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.auth-form input {
+    font-size: 16px;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: var(--primary-font);
+}
+.auth-form button {
+    background-color: var(--primary-accent);
+    color: white;
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 5px;
+}
+.auth-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #667085;
+}
+.auth-link a {
+    color: var(--primary-accent);
+    text-decoration: none;
+    font-weight: 500;
+}
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+.error, .success {
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    display: none;
+    font-size: 14px;
+}
+.error {
+    background-color: #fdf2f2;
+    color: #d92d20;
+}
+.success {
+    background-color: #f0fbf4;
+    color: #039855;
+}
